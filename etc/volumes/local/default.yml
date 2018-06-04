@@ -18,6 +18,13 @@ gerrit:
     - git_repos:/var/git/repos 
     - gerrit_review_site:/var/gerrit/review_site 
 
+gitlab:
+  user: root
+  volumes:
+    - gitlab_config:/etc/gitlab
+    - gitlab_logs:/var/log/gitlab
+    - gitlab_data:/var/opt/gitlab
+
 sensu-api:
   volumes:
     - sensu_api_conf:/etc/sensu/conf.d

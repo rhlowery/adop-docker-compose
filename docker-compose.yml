@@ -95,6 +95,37 @@ gerrit:
     - "USER_EMAIL=${GERRIT_USER_EMAIL}"
     - "DOWNLOAD_SCHEME=http"
 
+gitlab:
+  container_name: gitlab
+  restart: always
+  image: gitlab/gitlab-ce:latest
+  net: ${CUSTOM_NETWORK_NAME}
+  ports:
+    - "9080:9080"
+    - "9443:443"
+    - "9022:22"
+  expose:
+    - "9880"
+  environment:
+    GITLAB_ROOT_PASSWORD: ${GITLAB_ROOT_PASSWORD} 
+    GITLAB_OMNIBUS_CONFIG: |
+     external_url 'http://${TARGET_HOST}:9080'
+     gitlab_rails['ldap_enabled'] = true
+     gitlab_rails['ldap_servers'] = YAML.load <<-'EOS'
+       main:
+         label: 'LDAP'
+         host: ldap
+         port: 389
+         uid: 'uid'
+         method: 'plain'
+         bind_dn: 'cn=admin,${LDAP_FULL_DOMAIN}'
+         password: '${LDAP_PWD}'
+         active_directory: false
+         allow_username_or_email_login: false
+         block_auto_created_users: false
+         base: '${LDAP_FULL_DOMAIN}'
+     EOS
+
 sensu-uchiwa:
   container_name: sensu-uchiwa
   restart: always

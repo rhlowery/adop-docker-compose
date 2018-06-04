@@ -24,6 +24,12 @@ gerrit:
     syslog-address: "udp://${LOGSTASH_HOST}:25826"
     tag: "gerrit"
 
+gitlab:
+  log_driver: "syslog"
+  log_opt:
+    syslog-address: "udp://${LOGSTASH_HOST}:25826"
+    tag: "gitlab"
+
 sensu-uchiwa:
   log_driver: "syslog"
   log_opt:
